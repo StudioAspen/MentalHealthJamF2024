@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class BlockInteractManager : MonoBehaviour
 {
+    public static BlockInteractManager Instance;
+
     private LineRenderer lineRenderer;
     
     [Header("Pointers")]
@@ -18,6 +20,12 @@ public class BlockInteractManager : MonoBehaviour
 
     private void Awake()
     {
+        if(Instance != null)
+        {
+            Destroy(Instance);
+        }
+        Instance = this;
+
         lineRenderer = GetComponent<LineRenderer>();
     }
 
@@ -41,14 +49,14 @@ public class BlockInteractManager : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Mouse0) && hoveredBlock != null && !isDragging)
         {
+            if (hoveredBlock.IsFrozen) return;
+
             StartDrag();
-            isDragging = true;
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse0) && isDragging)
         {
             StopDrag();
-            isDragging = false;
         }
     }
 
@@ -62,11 +70,16 @@ public class BlockInteractManager : MonoBehaviour
     private void StartDrag()
     {
         draggedBlock = hoveredBlock;
+
+        draggedBlock.IsWaiting = false;
         draggedBlock.Rigidbody.gravityScale = 0;
         draggedBlock.DragPoint.position = mouseWorldPos;
+        draggedBlock.Rigidbody.constraints = RigidbodyConstraints2D.None;
 
         blockPointerTransform.position = draggedBlock.DragPoint.position;
         blockPointerTransform.gameObject.SetActive(true);
+
+        isDragging = true;
     }
 
     private void StopDrag()
@@ -77,12 +90,20 @@ public class BlockInteractManager : MonoBehaviour
         blockPointerTransform.gameObject.SetActive(false);
 
         lineRenderer.enabled = false;
+
+        isDragging = false;
     }
 
     private void HandleDrag()
     {
         if (isDragging)
         {
+            if (draggedBlock.IsFrozen)
+            {
+                StopDrag();
+                return;
+            }
+
             blockPointerTransform.position = draggedBlock.DragPoint.position;
             DrawLine(mouseWorldPos, draggedBlock.DragPoint.position);
 

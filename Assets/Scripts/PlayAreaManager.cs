@@ -55,6 +55,10 @@ public class PlayAreaManager : MonoBehaviour
         }
     }
 
+    public void ChildBlockToShiftingPlatform(Transform child)
+    {
+        child.parent = shiftingPlatformTransform;
+    }
     private void StartWarnEditors()
     {
         if (StartPhysicsTriggerGameObject == null)

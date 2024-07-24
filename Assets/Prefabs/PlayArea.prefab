@@ -398,7 +398,7 @@ MonoBehaviour:
   FreezeTriggerGameObject: {fileID: 5007883110695518337}
   DeleteTriggerGameObject: {fileID: 5124763110595569168}
   shiftingPlatformTransform: {fileID: 5694324099370692204}
-  shiftDownAmount: 0.5
+  shiftDownAmount: 0.1
   shiftDownDuration: 0.5
   shiftDownInterval: 2
 --- !u!1 &5007883110695518337
@@ -835,7 +835,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5694324099370692204}
   - component: {fileID: 649067145501843377}
-  - component: {fileID: 2041823918697263138}
   m_Layer: 0
   m_Name: ShiftingPlatform
   m_TagString: Untagged
@@ -851,13 +850,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6746039311216470966}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.83, y: -5.38, z: 0}
-  m_LocalScale: {x: 1.755447, y: 9.400008, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3835655130827278854}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &649067145501843377
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -910,27 +909,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!65 &2041823918697263138
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6746039311216470966}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.0000001, y: 1.0000002, z: 0.2}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6973510718190764131
 GameObject:
   m_ObjectHideFlags: 0
