@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ResourceManager : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class ResourceManager : MonoBehaviour
     public float currentFinancialHealth;
     public float currentGoal;
 
+    public UnityEvent OnReachGoal = new UnityEvent();
+
+    bool draining = false;
+
     private void Start() {
         currentPhysicalHealth = maxPhysicalHealth;
         currentMentalHealth = maxMentalHealth;
@@ -29,9 +34,13 @@ public class ResourceManager : MonoBehaviour
     }
 
     private void Update() {
-        DrainUpdate();
+        if(draining) {
+            DrainUpdate();
+        }
     }
-
+    public void SetDraining(bool value) {
+        draining = value;
+    }
     public void AddPhysical(float amount) {
         currentPhysicalHealth = Mathf.Min(maxPhysicalHealth, currentPhysicalHealth + amount);
     }
@@ -43,13 +52,14 @@ public class ResourceManager : MonoBehaviour
     }
     public void AddGoal(float amount) {
         currentGoal = Mathf.Min(maxGoal, currentGoal + amount);
+        if(currentGoal >= maxGoal) {
+            OnReachGoal.Invoke();
+        }
     }
 
     private void DrainUpdate() {
-        currentPhysicalHealth -= physicalDrain * Time.deltaTime;
-        currentMentalHealth -= mentalDrain * Time.deltaTime;
-        currentFinancialHealth -= financialDrain * Time.deltaTime;
+        currentPhysicalHealth = Mathf.Max(0, currentPhysicalHealth - (physicalDrain * Time.deltaTime));
+        currentMentalHealth = Mathf.Max(0, currentMentalHealth - (mentalDrain * Time.deltaTime));
+        currentFinancialHealth = Mathf.Max(0, currentFinancialHealth - (financialDrain * Time.deltaTime));
     }
-
-
 }
