@@ -21,7 +21,7 @@ public class PlayAreaManager : MonoBehaviour
     private Coroutine shiftCoroutine;
 
     [Header("Events")]
-    public UnityEvent OnLoseGame;
+    public UnityEvent OnLoseGame = new UnityEvent();
 
     private void Awake()
     {
