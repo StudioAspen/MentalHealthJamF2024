@@ -11,7 +11,8 @@ public class BlockInteractManager : MonoBehaviour
     [SerializeField] private Transform blockPointerTransform;
 
     [Header("Block")]
-    [SerializeField] private LayerMask blockLayer;
+    [SerializeField] private LayerMask stillBlockLayer;
+    [SerializeField] private LayerMask physicsBlockLayer;
     private Block hoveredBlock;
     private Block draggedBlock;
 
@@ -62,7 +63,8 @@ public class BlockInteractManager : MonoBehaviour
 
     private void AssignHoveredBlock()
     {
-        Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, blockLayer);
+        Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, stillBlockLayer);
+        hit = hit == null ? Physics2D.OverlapPoint(mouseWorldPos, physicsBlockLayer) : hit;
 
         hoveredBlock = hit == null ? null : hit.gameObject.GetComponent<Block>();
     }
@@ -72,6 +74,7 @@ public class BlockInteractManager : MonoBehaviour
         draggedBlock = hoveredBlock;
 
         draggedBlock.IsWaiting = false;
+        draggedBlock.IsBeingDragged = true;
         draggedBlock.Rigidbody.gravityScale = 0;
         draggedBlock.DragPoint.position = mouseWorldPos;
         draggedBlock.Rigidbody.constraints = RigidbodyConstraints2D.None;
@@ -84,6 +87,7 @@ public class BlockInteractManager : MonoBehaviour
 
     private void StopDrag()
     {
+        draggedBlock.IsBeingDragged = false;
         draggedBlock.Rigidbody.gravityScale = 1;
         draggedBlock = null;
 
@@ -103,6 +107,8 @@ public class BlockInteractManager : MonoBehaviour
                 StopDrag();
                 return;
             }
+
+            draggedBlock.HasTouchedLava = false;
 
             blockPointerTransform.position = draggedBlock.DragPoint.position;
             DrawLine(mouseWorldPos, draggedBlock.DragPoint.position);

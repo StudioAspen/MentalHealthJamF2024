@@ -1,20 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayAreaManager : MonoBehaviour
 {
     public static PlayAreaManager Instance;
 
+    [Header("Triggers and Colliders")]
     public GameObject StartPhysicsTriggerGameObject;
     public GameObject FreezeTriggerGameObject;
     public GameObject DeleteTriggerGameObject;
+    public GameObject OverfillTriggerGameObject;
 
+    [Header("Shifting Settings")]
     [SerializeField] private Transform shiftingPlatformTransform;
     [SerializeField] private float shiftDownAmount = 1f;
     [SerializeField] private float shiftDownDuration = 1f;
     [SerializeField] private float shiftDownInterval = 2f;
     private Coroutine shiftCoroutine;
+
+    [Header("Events")]
+    public UnityEvent OnLoseGame;
 
     private void Awake()
     {
@@ -27,8 +34,6 @@ public class PlayAreaManager : MonoBehaviour
 
     void Start()
     {
-        StartWarnEditors();
-
         shiftCoroutine = StartCoroutine(ShiftDownCoroutine());
     }
 
@@ -58,27 +63,5 @@ public class PlayAreaManager : MonoBehaviour
     public void ChildBlockToShiftingPlatform(Transform child)
     {
         child.parent = shiftingPlatformTransform;
-    }
-    private void StartWarnEditors()
-    {
-        if (StartPhysicsTriggerGameObject == null)
-        {
-            Debug.LogError("Please assign a Start Physics Trigger Object to the Play Area Manager");
-        }
-
-        if (FreezeTriggerGameObject == null)
-        {
-            Debug.LogError("Please assign a Freeze Trigger Object to the Play Area Manager");
-        }
-
-        if (DeleteTriggerGameObject == null)
-        {
-            Debug.Log("Please assign a Delete Trigger Object to the Play Area Manager");
-        }
-
-        if(shiftingPlatformTransform == null)
-        {
-            Debug.LogError("Please assign a Shifting Platform Transform to the Play Area Manager");
-        }
     }
 }

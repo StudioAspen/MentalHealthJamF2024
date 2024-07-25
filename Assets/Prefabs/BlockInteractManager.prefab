@@ -217,9 +217,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mousePointerTransform: {fileID: 7750178836783219143}
   blockPointerTransform: {fileID: 1636712516014515662}
-  blockLayer:
+  stillBlockLayer:
     serializedVersion: 2
     m_Bits: 8
+  physicsBlockLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!120 &1531411378249418408
 LineRenderer:
   serializedVersion: 2
