@@ -5,6 +5,8 @@ using UnityEngine.Events;
 
 public class ResourceManager : MonoBehaviour
 {
+    public static ResourceManager Instance;
+
     [Header("Max Values")]
     [SerializeField] public float maxPhysicalHealth;
     [SerializeField] public float maxMentalHealth;
@@ -26,6 +28,11 @@ public class ResourceManager : MonoBehaviour
 
     bool draining = false;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start() {
         currentPhysicalHealth = maxPhysicalHealth;
         currentMentalHealth = maxMentalHealth;
@@ -36,6 +43,11 @@ public class ResourceManager : MonoBehaviour
     private void Update() {
         if(draining) {
             DrainUpdate();
+        }
+
+        if(currentPhysicalHealth <= 0 || currentMentalHealth <= 0 || currentFinancialHealth <= 0)
+        {
+            PlayAreaManager.Instance.OnLoseGame.Invoke();
         }
     }
     public void SetDraining(bool value) {

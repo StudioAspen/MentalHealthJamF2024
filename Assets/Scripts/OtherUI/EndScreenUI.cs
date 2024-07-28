@@ -12,6 +12,7 @@ public class EndScreenUI : MonoBehaviour
     }
 
     public void SetEndScreen(bool win) {
+        Time.timeScale = 0f;
         endScreen.SetActive(true);
         if(win) {
             endText.text = "You Survived";

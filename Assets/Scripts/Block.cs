@@ -14,9 +14,36 @@ public class Block : MonoBehaviour
     [HideInInspector] public bool HasStartedPhysics;
     [HideInInspector] public bool HasTouchedLava;
 
+    private BlockCreator blockCreator;
+    private bool prevIsWaiting = true;
+
+    public enum ResourceType
+    {
+        Physical,
+        Mental,
+        Financial
+    }
+    public ResourceType Resource;
+
     private void Awake()
     {
         Rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+    private void Start()
+    {
+        InitWithRandomResourceType();
+
+        
+    }
+
+    private void Update()
+    {
+        if(IsWaiting != prevIsWaiting)
+        {
+            prevIsWaiting = IsWaiting;
+            blockCreator.RemoveBlockFromSlot(this);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -72,5 +99,47 @@ public class Block : MonoBehaviour
         IsFrozen = true;
         Rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
         PlayAreaManager.Instance.ChildBlockToShiftingPlatform(transform);
+
+        switch (Resource)
+        {
+            case ResourceType.Physical:
+                ResourceManager.Instance.AddPhysical(5);
+                break;
+            case ResourceType.Mental:
+                ResourceManager.Instance.AddMental(5);
+                break;
+            case ResourceType.Financial:
+                ResourceManager.Instance.AddFinancial(5);
+                break;
+            default:
+                break;
+        }
+
+        ResourceManager.Instance.AddGoal(3);
+    }
+
+    public void InitWithRandomResourceType()
+    {
+        int randomIndex = Random.Range(0, 3);
+
+        Resource = (ResourceType)randomIndex;
+        AssignColor();
+    }
+
+    public void Init(BlockCreator creator)
+    {
+        blockCreator = creator;
+    }
+
+    public void AssignColor()
+    {
+        SpriteRenderer[] sprites = GetComponentsInChildren<SpriteRenderer>();
+
+        foreach(SpriteRenderer sprite in sprites)
+        {
+            if (Resource == ResourceType.Mental) sprite.color = Color.blue;
+            if (Resource == ResourceType.Physical) sprite.color = Color.red;
+            if (Resource == ResourceType.Financial) sprite.color = Color.green;
+        }
     }
 }
