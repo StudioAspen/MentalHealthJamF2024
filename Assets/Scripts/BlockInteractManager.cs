@@ -11,8 +11,8 @@ public class BlockInteractManager : MonoBehaviour
     [SerializeField] private Transform blockPointerTransform;
 
     [Header("Block")]
-    [SerializeField] private LayerMask stillBlockLayer;
-    [SerializeField] private LayerMask physicsBlockLayer;
+    [SerializeField] private LayerMask blockLayer;
+    [SerializeField] private float blockSnapToCursorSpeed = 1f;
     private Block hoveredBlock;
     private Block draggedBlock;
 
@@ -63,8 +63,7 @@ public class BlockInteractManager : MonoBehaviour
 
     private void AssignHoveredBlock()
     {
-        Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, stillBlockLayer);
-        hit = hit == null ? Physics2D.OverlapPoint(mouseWorldPos, physicsBlockLayer) : hit;
+        Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, blockLayer);
 
         hoveredBlock = hit == null ? null : hit.gameObject.GetComponent<Block>();
     }
@@ -76,6 +75,8 @@ public class BlockInteractManager : MonoBehaviour
         draggedBlock.IsWaiting = false;
         draggedBlock.IsBeingDragged = true;
         draggedBlock.Rigidbody.gravityScale = 0;
+        draggedBlock.Rigidbody.drag = 0f;
+        draggedBlock.Rigidbody.angularDrag = 2f;
         draggedBlock.DragPoint.position = mouseWorldPos;
         draggedBlock.Rigidbody.constraints = RigidbodyConstraints2D.None;
 
@@ -108,13 +109,14 @@ public class BlockInteractManager : MonoBehaviour
                 return;
             }
 
-            draggedBlock.HasTouchedLava = false;
+            draggedBlock.CancelFreezing();
 
             blockPointerTransform.position = draggedBlock.DragPoint.position;
             DrawLine(mouseWorldPos, draggedBlock.DragPoint.position);
 
             Vector3 dir = mouseWorldPos - draggedBlock.DragPoint.position;
             draggedBlock.Rigidbody.AddForceAtPosition(dir, draggedBlock.DragPoint.position);
+            draggedBlock.transform.position = Vector3.Lerp(draggedBlock.transform.position, mouseWorldPos, blockSnapToCursorSpeed * Time.deltaTime);
         }
     }
 
