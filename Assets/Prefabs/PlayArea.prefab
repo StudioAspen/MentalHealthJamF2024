@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 840402173706338349}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.4677005, y: 5.2700005, z: 0.17303103}
+  m_LocalPosition: {x: 3.4677005, y: 7.28, z: 0.17303103}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -58,8 +58,8 @@ Transform:
   m_GameObject: {fileID: 846263582196533588}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.84, y: 16.7, z: 0}
-  m_LocalScale: {x: 9.28625, y: 21.33062, z: 1}
+  m_LocalPosition: {x: 0.84, y: 17.47, z: 0}
+  m_LocalScale: {x: 9.28625, y: 15, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6427979100019572102}
@@ -303,8 +303,8 @@ MonoBehaviour:
   OverfillTriggerGameObject: {fileID: 4807661718395929233}
   shiftingPlatformTransform: {fileID: 5694324099370692204}
   shiftDownAmount: 1
-  shiftDownDuration: 0.5
-  shiftDownInterval: 1
+  shiftDownDuration: 1
+  shiftDownInterval: 10
   gameBlockPrefabs:
   - {fileID: 9071101505145073609, guid: 24c5a25106a501447873c9ce99a5d6ce, type: 3}
   - {fileID: 9071101505145073609, guid: fa42702d65143d142812d1bca7657d14, type: 3}
@@ -315,7 +315,7 @@ MonoBehaviour:
   - {fileID: 7148954535601762160, guid: 8753942dde2347f459f8d6dc1775ccb2, type: 3}
   spawnAreaStartTransform: {fileID: 2299836909541231969}
   spawnAreaStopTransform: {fileID: 6099725328285278809}
-  spawnInterval: 3
+  spawnInterval: 5
   spawnStartForce: 1
   OnBoardFilled:
     m_PersistentCalls:
@@ -1113,7 +1113,7 @@ Transform:
   m_GameObject: {fileID: 7274758713921523686}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.0628023, y: 5.2700005, z: 0.17303103}
+  m_LocalPosition: {x: -4.0628023, y: 7.28, z: 0.17303103}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -50,7 +50,6 @@ public class Block : MonoBehaviour
         {
             if (otherBlock.IsFrozen)
             {
-                Debug.Log("Tooching");
                 if (freezeAfterStopCoroutine == null) freezeAfterStopCoroutine = StartCoroutine(FreezeAfterStopCoroutine()); 
             }
         }
@@ -83,12 +82,6 @@ public class Block : MonoBehaviour
     {
         while (Rigidbody.velocity.magnitude > 0.05f)
         {
-            if (Rigidbody.transform.InverseTransformDirection(Rigidbody.velocity).y < 0.05f && Rigidbody.transform.InverseTransformDirection(Rigidbody.velocity).y > -0.05f)
-            {
-                print("rigid body is nearly stationary.");
-                break;
-            }
-
             yield return null;
         }
 
@@ -101,6 +94,14 @@ public class Block : MonoBehaviour
         IsFrozen = true;
         Rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
         PlayAreaManager.Instance.ChildBlockToShiftingPlatform(transform);
+
+        Color startColor = spriteRenderer.color;
+        for(float t = 0; t < 0.5f; t += Time.deltaTime)
+        {
+            spriteRenderer.color = Color.Lerp(startColor, Color.gray, t/0.5f);
+            yield return null;
+        }
+        spriteRenderer.color = Color.gray;
     }
 
     public void CancelFreezing()

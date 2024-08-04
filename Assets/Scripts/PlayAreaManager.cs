@@ -71,11 +71,7 @@ public class PlayAreaManager : MonoBehaviour
             int randomIndex = Random.Range(0, gameBlockPrefabs.Length);
             Block spawnedBlock = Instantiate(gameBlockPrefabs[randomIndex], randomPosBetweenBounds, randomStartRotation);
 
-            float randomShootAngle = Random.Range(-45f, 45f);
-            Quaternion randomShootRotation = Quaternion.Euler(0, 0, randomShootAngle);
-            Vector3 randomShootDirection = randomShootRotation * Vector2.down;
-
-            spawnedBlock.Rigidbody.velocity += spawnStartForce * (Vector2)randomShootDirection;
+            spawnedBlock.Rigidbody.AddForce(spawnStartForce * Vector2.down, ForceMode2D.Impulse);
 
             yield return new WaitForSeconds(spawnInterval);
         }

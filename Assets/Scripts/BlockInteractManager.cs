@@ -59,6 +59,7 @@ public class BlockInteractManager : MonoBehaviour
         {
             StopDrag();
         }
+       
     }
 
     private void AssignHoveredBlock()
@@ -115,8 +116,14 @@ public class BlockInteractManager : MonoBehaviour
             DrawLine(mouseWorldPos, draggedBlock.DragPoint.position);
 
             Vector3 dir = mouseWorldPos - draggedBlock.DragPoint.position;
-            draggedBlock.Rigidbody.AddForceAtPosition(dir, draggedBlock.DragPoint.position);
-            draggedBlock.transform.position = Vector3.Lerp(draggedBlock.transform.position, mouseWorldPos, blockSnapToCursorSpeed * Time.deltaTime);
+
+            Vector3 perimeterPointClosestToDragPoint = draggedBlock.GetComponent<Collider2D>().ClosestPoint(draggedBlock.DragPoint.position);
+            Debug.DrawLine(perimeterPointClosestToDragPoint, perimeterPointClosestToDragPoint + dir.normalized * blockSnapToCursorSpeed * Time.deltaTime);
+            if(!Physics.Raycast(perimeterPointClosestToDragPoint, dir, 5f * blockSnapToCursorSpeed * Time.deltaTime))
+            {
+                draggedBlock.Rigidbody.AddForceAtPosition(dir, draggedBlock.DragPoint.position);
+                draggedBlock.Rigidbody.MovePosition(Vector3.Lerp(draggedBlock.transform.position, mouseWorldPos, blockSnapToCursorSpeed * Time.deltaTime));
+            }
         }
     }
 
