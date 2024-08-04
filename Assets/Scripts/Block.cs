@@ -14,9 +14,20 @@ public class Block : MonoBehaviour
     [HideInInspector] public bool HasStartedPhysics;
     [HideInInspector] public bool HasTouchedLava;
 
+    public ResourceType ResourceType;
+    private SpriteRenderer spriteRenderer;
+
+    private Coroutine freezeAfterStopCoroutine;
+
     private void Awake()
     {
         Rigidbody = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        ResourceType = (ResourceType)Random.Range(0, 3);
+        if (ResourceType == ResourceType.Physical) spriteRenderer.color = Color.blue;
+        if (ResourceType == ResourceType.Mental) spriteRenderer.color = Color.red;
+        if (ResourceType == ResourceType.Financial) spriteRenderer.color = Color.green;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -27,24 +38,35 @@ public class Block : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject == PlayAreaManager.Instance.StartPhysicsTriggerGameObject)
+        HandleFrozenBlockTouch(collision);
+        HandleLavaTouch(collision);
+    }
+
+    private void HandleFrozenBlockTouch(Collision2D collision)
+    {
+        if(collision.gameObject.TryGetComponent(out Block otherBlock))
         {
-            gameObject.layer = LayerMask.NameToLayer("PhysicsBlock");
-            Rigidbody.constraints = RigidbodyConstraints2D.None;
-            HasStartedPhysics = true;
+            if (otherBlock.IsFrozen)
+            {
+                if (freezeAfterStopCoroutine == null) freezeAfterStopCoroutine = StartCoroutine(FreezeAfterStopCoroutine()); 
+            }
         }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void HandleLavaTouch(Collision2D collision)
     {
         if (collision.gameObject == PlayAreaManager.Instance.FreezeTriggerGameObject && !HasTouchedLava)
         {
             HasTouchedLava = true;
-            StartCoroutine(FreezeAfterStopCoroutine());
+            freezeAfterStopCoroutine = StartCoroutine(FreezeAfterStopCoroutine());
         }
 
+    }
+
+    private void HandleLose(Collision2D collision)
+    {
         if (Rigidbody.velocity.magnitude > 0.15f) return;
         if (IsWaiting) return;
         if (!HasStartedPhysics) return;
@@ -52,18 +74,18 @@ public class Block : MonoBehaviour
 
         if (collision.gameObject == PlayAreaManager.Instance.OverfillTriggerGameObject)
         {
-            PlayAreaManager.Instance.OnLoseGame.Invoke();
+            PlayAreaManager.Instance.OnBoardFilled.Invoke();
         }
     }
 
     private IEnumerator FreezeAfterStopCoroutine()
     {
-        while(Rigidbody.velocity.magnitude > 0.25f)
+        while (Rigidbody.velocity.magnitude > 0.05f)
         {
             yield return null;
         }
 
-        if(!GetComponent<Collider2D>().IsTouching(PlayAreaManager.Instance.FreezeTriggerGameObject.GetComponent<Collider2D>())) // not touching floor
+        if (IsBeingDragged)
         {
             HasTouchedLava = false;
             yield break;
@@ -72,5 +94,27 @@ public class Block : MonoBehaviour
         IsFrozen = true;
         Rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
         PlayAreaManager.Instance.ChildBlockToShiftingPlatform(transform);
+
+        Color startColor = spriteRenderer.color;
+        for(float t = 0; t < 0.5f; t += Time.deltaTime)
+        {
+            spriteRenderer.color = Color.Lerp(startColor, Color.gray, t/0.5f);
+            yield return null;
+        }
+        spriteRenderer.color = Color.gray;
     }
+
+    public void CancelFreezing()
+    {
+        if (freezeAfterStopCoroutine != null) StopCoroutine(freezeAfterStopCoroutine);
+
+        HasTouchedLava = false;
+    }
+}
+
+public enum ResourceType
+{
+    Physical,
+    Mental,
+    Financial
 }
