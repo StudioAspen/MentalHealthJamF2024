@@ -6,16 +6,19 @@ using UnityEngine.Tilemaps;
 public class Board : MonoBehaviour
 {
     [SerializeField] GameObject gamePiecePrefab;
+    [SerializeField] int initalPieceAmount;
+    [SerializeField] float burnRate;
+    float burnTimer;
     [SerializeField] float spawnRate;
     float spawnTimer = 0;
 
     public Tilemap tilemap { get; private set; }
     public List<Piece> activePieces = new List<Piece>();
 
+    public PieceType[] pieceTypes;
     public TetrominoData[] tetrominoes;
     public Vector2Int boardSize = new Vector2Int(10, 20);
-    public Vector3Int spawnPosition = new Vector3Int(-2, 8, 0);
-    private int spawnCheck = 20;
+    public Vector3Int spawnPosition = new Vector3Int(0, 8, 0);
 
     bool gameActive = false;
 
@@ -39,7 +42,10 @@ public class Board : MonoBehaviour
 
     private void Start()
     {
-        //SpawnPiece();
+        // Initalizing some pieces
+        for(int i = 0; i < initalPieceAmount; i++) {
+            SpawnPiece();
+        }
     }
     private void Update() {
         if (gameActive) {
@@ -47,6 +53,12 @@ public class Board : MonoBehaviour
             if (spawnTimer <= 0) {
                 SpawnPiece();
                 spawnTimer = spawnRate;
+            }
+
+            burnTimer -= Time.deltaTime;
+            if(burnTimer <= 0) {
+                BurnBottom();
+                burnTimer = burnRate;
             }
         }
     }
@@ -57,24 +69,60 @@ public class Board : MonoBehaviour
 
     public void SpawnPiece()
     {
-        int random = Random.Range(0, tetrominoes.Length);
-        TetrominoData data = tetrominoes[random];
+        int randomTetromino = Random.Range(0, tetrominoes.Length);
+        TetrominoData data = tetrominoes[randomTetromino];
+
+        int randomPieceType = Random.Range(0, pieceTypes.Length);
+        PieceType type = pieceTypes[randomPieceType];
 
         Piece newPiece = Instantiate(gamePiecePrefab).GetComponent<Piece>();
-        newPiece.Initialize(this, spawnPosition, data);
-        int times = spawnCheck;
-        while(times<=0) {
-            times--;
-            Vector3Int posSpawnMove = new Vector3Int();
+        newPiece.Initialize(this, spawnPosition, data, type);
 
-        }
-
-        if (IsValidPosition(newPiece, spawnPosition)) {
+        if (TryGetRandomSpawnPos(newPiece, out Vector3Int randomPos)) {
+            newPiece.SetPosition(randomPos);
             activePieces.Add(newPiece);
             Set(newPiece);
-        } else {
+        } 
+        else {
+            Destroy(newPiece.gameObject);
             GameOver();
         }
+    }
+
+    private void BurnBottom() {
+        foreach (Piece piece in activePieces) {
+            if (piece.locked) {
+                piece.LockedMoveDown();
+            }
+        }
+    }
+
+    private bool TryGetRandomSpawnPos(Piece newPiece, out Vector3Int randomPos) {
+
+        List<Vector3Int> validPlaces = new List<Vector3Int>();
+        Vector3Int topLeft = new Vector3Int(-boardSize.x/2, boardSize.y/2);
+        Debug.Log(topLeft);
+        for(int i = 0; i < boardSize.y; i++) {
+
+            // Finding all valid places on row
+            validPlaces.Clear();
+            for(int j = 0; j < boardSize.x; j++) {
+                Vector3Int checkPos = topLeft + new Vector3Int(j,-i,0);
+                if(IsValidPosition(newPiece, checkPos)) {
+                    validPlaces.Add(checkPos);
+                } 
+            }
+
+            if(validPlaces.Count > 0) {
+                int randomPlace = Random.Range(0,validPlaces.Count);
+                randomPos = validPlaces[randomPlace];
+                return true;
+            }
+        }
+        
+
+        randomPos = new Vector3Int();
+        return false;
     }
 
     public void GameOver()
@@ -103,11 +151,15 @@ public class Board : MonoBehaviour
         for (int i = 0; i < piece.cells.Length; i++)
         {
             Vector3Int tilePosition = piece.cells[i] + piece.position;
-            tilemap.SetTile(tilePosition, piece.data.tile);
-            if(piece.locked) {
-                Debug.Log("locked peice");
-                tilemap.SetTileFlags(tilePosition, TileFlags.None);
-                tilemap.SetColor(tilePosition, Color.grey);
+
+            // Only drawing tile if its in bounds
+            RectInt bounds = Bounds;
+            if (bounds.Contains((Vector2Int)tilePosition)) {
+                tilemap.SetTile(tilePosition, piece.pieceType.tile);
+                if (piece.locked) {
+                    tilemap.SetTileFlags(tilePosition, TileFlags.None);
+                    tilemap.SetColor(tilePosition, Color.grey);
+                }
             }
         }
     }

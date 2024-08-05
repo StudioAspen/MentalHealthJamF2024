@@ -1258,10 +1258,15 @@ MonoBehaviour:
   physicalDrain: 1
   mentalDrain: 1
   financialDrain: 1
+  minInitalPercent: 0.6
+  maxInitalPercent: 0.9
   currentPhysicalHealth: 0
   currentMentalHealth: 0
   currentFinancialHealth: 0
   currentGoal: 0
+  OnReachGoal:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7578119211972004276
 GameObject:
   m_ObjectHideFlags: 0

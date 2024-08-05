@@ -16,6 +16,10 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] public float mentalDrain;
     [SerializeField] public float financialDrain;
 
+    [Header("Inital Random Value")]
+    [SerializeField] [Range(0f,1f)] float minInitalPercent;
+    [SerializeField] [Range(0f, 1f)] float maxInitalPercent;
+
     [Header("Current Values")]
     public float currentPhysicalHealth;
     public float currentMentalHealth;
@@ -27,9 +31,9 @@ public class ResourceManager : MonoBehaviour
     bool draining = false;
 
     private void Start() {
-        currentPhysicalHealth = maxPhysicalHealth;
-        currentMentalHealth = maxMentalHealth;
-        currentFinancialHealth = maxFinancialHealth;
+        currentPhysicalHealth = maxPhysicalHealth * Mathf.Lerp(minInitalPercent, maxInitalPercent, Random.value);
+        currentMentalHealth = maxMentalHealth * Mathf.Lerp(minInitalPercent, maxInitalPercent, Random.value);
+        currentFinancialHealth = maxFinancialHealth * Mathf.Lerp(minInitalPercent, maxInitalPercent, Random.value);
         currentGoal = 0;
     }
 

@@ -3,6 +3,7 @@ using UnityEngine;
 public class Piece : MonoBehaviour {
     public Board board { get; private set; }
     public TetrominoData data { get; private set; }
+    public PieceType pieceType { get; private set; }
     public Vector3Int[] cells { get; private set; }
     public Vector3Int position { get; private set; }
     public int rotationIndex { get; private set; }
@@ -10,6 +11,8 @@ public class Piece : MonoBehaviour {
     public float stepDelay = 1f;
     public float moveDelay = 0.1f;
     public float lockDelay = 0.5f;
+    public float resourceGain = 2f;
+    public float goalGain = 1f;
 
     private float stepTime;
     private float moveTime;
@@ -18,9 +21,10 @@ public class Piece : MonoBehaviour {
 
     public bool canRender = true;
 
-    public void Initialize(Board board, Vector3Int position, TetrominoData data)
+    public void Initialize(Board board, Vector3Int position, TetrominoData data, PieceType pieceType)
     {
         this.data = data;
+        this.pieceType = pieceType;
         this.board = board;
         this.position = position;
 
@@ -65,16 +69,48 @@ public class Piece : MonoBehaviour {
         if (canRender) {
             board.Set(this);
         }
+
+        DestroyCheck();
+    }
+
+    private void DestroyCheck() {
+        int highestY = -board.boardSize.y;
+        foreach (Vector3Int cell in cells) {
+            int heightCheck = (cell + position).y;
+            if (heightCheck > highestY) {
+                highestY = heightCheck;
+            }
+        }
+
+        if (highestY < -board.boardSize.y / 2) {
+            DestroyPiece();
+        }
     }
 
     public GameObject ClonePiece() {
         GameObject newPiece = Instantiate(gameObject);
-        newPiece.GetComponent<Piece>().Initialize(board, position, data);
+        newPiece.GetComponent<Piece>().Initialize(board, position, data, pieceType);
+        newPiece.GetComponent<Piece>().SetRotation(rotationIndex);
         return newPiece;
     }
 
     public void SetLock(bool val) {
         locked = val;
+        if(locked) {
+            ResourceManager resourceManager = FindObjectOfType<ResourceManager>();
+            resourceManager.AddGoal(goalGain);
+            switch(pieceType.resourceType) {
+                case PieceResourceType.PHYSICAL:
+                    resourceManager.AddPhysical(resourceGain);
+                    break;
+                case PieceResourceType.MENTAL:
+                    resourceManager.AddMental(resourceGain);
+                    break;
+                case PieceResourceType.FINANCIAL:
+                    resourceManager.AddFinancial(resourceGain);
+                    break;
+            }
+        }
     }
 
     public void CanRender(bool val) {
@@ -134,6 +170,23 @@ public class Piece : MonoBehaviour {
         board.SpawnPiece();
     }
 
+    public void LockedMoveDown() {
+        // Setting new position
+        Vector3Int newPosition = position;
+        newPosition.y--;
+
+        board.Clear(this);
+        position = newPosition;
+        board.Set(this);
+
+    }
+
+    public void DestroyPiece() {
+        board.Clear(this);
+        board.activePieces.Remove(this);
+        Destroy(gameObject);
+    }
+
     private bool Move(Vector2Int translation)
     {
         Vector3Int newPosition = position;
@@ -148,7 +201,9 @@ public class Piece : MonoBehaviour {
             position = newPosition;
             moveTime = Time.time + moveDelay;
             lockTime = 0f; // reset
-            CollisionCheck();
+            if (canRender) {
+                CollisionCheck();
+            }
             board.Set(this);
         }
 
@@ -157,8 +212,15 @@ public class Piece : MonoBehaviour {
 
     private void CollisionCheck() {
         foreach(Vector3Int cell in cells) {
-            if((cell+position).y <= -10) {
+            Vector3Int posCheck = cell + position;
+            Piece potentialPiece = board.GetPieceAtCell(posCheck + Vector3Int.down);
+            if (posCheck.y <= -board.boardSize.y/2) {
                 SetLock(true);
+            }
+            else if(potentialPiece) {
+                if(potentialPiece.locked) {
+                    SetLock(true);
+                }
             }
         }
     }
@@ -176,14 +238,22 @@ public class Piece : MonoBehaviour {
         // Revert the rotation if the wall kick tests fail
         if (!TestWallKicks(rotationIndex, direction))
         {
+            Debug.Log("Wall kick");
             rotationIndex = originalRotation;
             ApplyRotationMatrix(-direction);
         }
     }
     public void SetRotation(int newRotationIndex) {
-        while(rotationIndex != newRotationIndex) {
-            Rotate(1);
+        int limit = 10;
+        board.Clear(this);
+        int direction = 1;
+        while(rotationIndex != newRotationIndex && limit > 0) {
+            rotationIndex = Wrap(rotationIndex + direction, 0, 4);
+            ApplyRotationMatrix(direction);
+            Debug.Log(rotationIndex + " " + newRotationIndex);
+            limit--;
         }
+        board.Set(this);
     }
     private void ApplyRotationMatrix(int direction)
     {
