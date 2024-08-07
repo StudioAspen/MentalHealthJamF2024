@@ -24,7 +24,6 @@ public class PlayAreaManager : MonoBehaviour
     [SerializeField] private Transform spawnAreaStartTransform;
     [SerializeField] private Transform spawnAreaStopTransform;
     [SerializeField] private float spawnInterval = 3f;
-    [SerializeField] private float spawnStartForce = 1f;
     private Coroutine spawnBlocksCoroutine;
 
     [Header("Events")]
@@ -69,8 +68,6 @@ public class PlayAreaManager : MonoBehaviour
 
             int randomIndex = Random.Range(0, gameBlockPrefabs.Length);
             Block spawnedBlock = Instantiate(gameBlockPrefabs[randomIndex], randomPosBetweenBounds, randomStartRotation);
-
-            spawnedBlock.Rigidbody.AddForce(spawnStartForce * Vector2.down, ForceMode2D.Impulse);
 
             yield return new WaitForSeconds(spawnInterval);
         }

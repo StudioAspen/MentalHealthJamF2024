@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Resources;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Block : MonoBehaviour
 {
+    private ResourceManager resourceManager;
+
     [HideInInspector] public Rigidbody2D Rigidbody;
     public Transform DragPoint;
 
@@ -20,14 +23,17 @@ public class Block : MonoBehaviour
 
     private void Awake()
     {
+        resourceManager = FindObjectOfType<ResourceManager>();
+
         Rigidbody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         ResourceType = (ResourceType)Random.Range(0, 3);
-        if (ResourceType == ResourceType.Physical) spriteRenderer.color = Color.blue;
-        if (ResourceType == ResourceType.Mental) spriteRenderer.color = Color.red;
+        if (ResourceType == ResourceType.Physical) spriteRenderer.color = Color.red;
+        if (ResourceType == ResourceType.Mental) spriteRenderer.color = Color.blue;
         if (ResourceType == ResourceType.Financial) spriteRenderer.color = Color.green;
     }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -37,10 +43,25 @@ public class Block : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        HandleOverfillCollider(collision);
+    }
+
     private void OnCollisionStay2D(Collision2D collision)
     {
         HandleFrozenBlockTouch(collision);
         HandleLavaTouch(collision);
+    }
+
+    private void HandleOverfillCollider(Collider2D collision)
+    {
+        if (!IsFrozen) return;
+
+        if(collision.gameObject == PlayAreaManager.Instance.OverfillTriggerGameObject)
+        {
+            PlayAreaManager.Instance.OnBoardFilled?.Invoke();
+        }
     }
 
     private void HandleFrozenBlockTouch(Collision2D collision)
@@ -92,6 +113,12 @@ public class Block : MonoBehaviour
         IsFrozen = true;
         Rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
         PlayAreaManager.Instance.ChildBlockToShiftingPlatform(transform);
+
+        if (ResourceType == ResourceType.Physical) resourceManager.AddPhysical(5);
+        if (ResourceType == ResourceType.Mental) resourceManager.AddMental(5);
+        if (ResourceType == ResourceType.Financial) resourceManager.AddFinancial(5);
+
+        resourceManager.AddGoal(1);
 
         Color startColor = spriteRenderer.color;
         for(float t = 0; t < 0.5f; t += Time.deltaTime)

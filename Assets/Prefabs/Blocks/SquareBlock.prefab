@@ -135,7 +135,6 @@ MonoBehaviour:
   Rigidbody: {fileID: 0}
   DragPoint: {fileID: 3890226913509720082}
   IsBeingDragged: 0
-  IsWaiting: 1
   IsFrozen: 0
   HasStartedPhysics: 0
   HasTouchedLava: 0
@@ -200,7 +199,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDrag: 0
   m_AngularDrag: 2
-  m_GravityScale: 0
+  m_GravityScale: 0.1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2

@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
         winConditionTimer = FindAnyObjectByType<WinConditionTimer>();
         
         resourceManager.OnReachGoal.AddListener(WinGame); // Setting listener for winning game
+        PlayAreaManager.Instance.OnBoardFilled.AddListener(LoseGame);
+
+        Time.timeScale = 0f;
     }
 
     private void Update() {
@@ -27,16 +30,19 @@ public class GameManager : MonoBehaviour
     }
 
     public void StartGame() {
+        Time.timeScale = 1f;
         resourceManager.SetDraining(true); // Starting draining
         winConditionTimer.SetTimerActive(true); // Starting timer
     }
 
     public void WinGame() {
+        Time.timeScale = 0f;
         endScreen.SetEndScreen(true);
         resourceManager.SetDraining(false);
         winConditionTimer.SetTimerActive(false);
     }
     public void LoseGame() {
+        Time.timeScale = 0f;
         endScreen.SetEndScreen(false);
         resourceManager.SetDraining(false);
         winConditionTimer.SetTimerActive(false);
