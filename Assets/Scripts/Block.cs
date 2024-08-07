@@ -9,7 +9,6 @@ public class Block : MonoBehaviour
     public Transform DragPoint;
 
     [HideInInspector] public bool IsBeingDragged;
-    [HideInInspector] public bool IsWaiting = true;
     [HideInInspector] public bool IsFrozen;
     [HideInInspector] public bool HasStartedPhysics;
     [HideInInspector] public bool HasTouchedLava;
@@ -68,7 +67,6 @@ public class Block : MonoBehaviour
     private void HandleLose(Collision2D collision)
     {
         if (Rigidbody.velocity.magnitude > 0.15f) return;
-        if (IsWaiting) return;
         if (!HasStartedPhysics) return;
         if (IsBeingDragged) return;
 

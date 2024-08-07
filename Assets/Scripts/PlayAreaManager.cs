@@ -8,7 +8,6 @@ public class PlayAreaManager : MonoBehaviour
     public static PlayAreaManager Instance;
 
     [Header("Triggers and Colliders")]
-    public GameObject StartPhysicsTriggerGameObject;
     public GameObject FreezeTriggerGameObject;
     public GameObject DeleteTriggerGameObject;
     public GameObject OverfillTriggerGameObject;

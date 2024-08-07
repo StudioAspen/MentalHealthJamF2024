@@ -1,18 +1,18 @@
 using UnityEngine;
+using static UnityEditor.Rendering.ShadowCascadeGUI;
 
 public class BlockInteractManager : MonoBehaviour
 {
     public static BlockInteractManager Instance;
-
-    private LineRenderer lineRenderer;
     
     [Header("Pointers")]
     [SerializeField] private Transform mousePointerTransform;
-    [SerializeField] private Transform blockPointerTransform;
 
     [Header("Block")]
     [SerializeField] private LayerMask blockLayer;
-    [SerializeField] private float blockSnapToCursorSpeed = 1f;
+    [SerializeField] private float blockSnapToCursorSpeed = 10f;
+    [SerializeField] private float blockRotateSpeed = 5f;
+    private float targetBlockRotateAngle;
     private Block hoveredBlock;
     private Block draggedBlock;
 
@@ -26,8 +26,6 @@ public class BlockInteractManager : MonoBehaviour
             Destroy(Instance);
         }
         Instance = this;
-
-        lineRenderer = GetComponent<LineRenderer>();
     }
 
     void Update()
@@ -36,10 +34,7 @@ public class BlockInteractManager : MonoBehaviour
 
         HandleInput();
         AssignHoveredBlock();
-    }
 
-    private void FixedUpdate()
-    {
         HandleDrag();
     }
 
@@ -73,16 +68,14 @@ public class BlockInteractManager : MonoBehaviour
     {
         draggedBlock = hoveredBlock;
 
-        draggedBlock.IsWaiting = false;
         draggedBlock.IsBeingDragged = true;
         draggedBlock.Rigidbody.gravityScale = 0;
         draggedBlock.Rigidbody.drag = 0f;
         draggedBlock.Rigidbody.angularDrag = 2f;
         draggedBlock.DragPoint.position = mouseWorldPos;
-        draggedBlock.Rigidbody.constraints = RigidbodyConstraints2D.None;
+        draggedBlock.Rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
 
-        blockPointerTransform.position = draggedBlock.DragPoint.position;
-        blockPointerTransform.gameObject.SetActive(true);
+        targetBlockRotateAngle = draggedBlock.transform.rotation.eulerAngles.z;
 
         isDragging = true;
     }
@@ -92,10 +85,6 @@ public class BlockInteractManager : MonoBehaviour
         draggedBlock.IsBeingDragged = false;
         draggedBlock.Rigidbody.gravityScale = 1;
         draggedBlock = null;
-
-        blockPointerTransform.gameObject.SetActive(false);
-
-        lineRenderer.enabled = false;
 
         isDragging = false;
     }
@@ -110,29 +99,30 @@ public class BlockInteractManager : MonoBehaviour
                 return;
             }
 
+            HandleRotate();
+
             draggedBlock.CancelFreezing();
 
-            blockPointerTransform.position = draggedBlock.DragPoint.position;
-            DrawLine(mouseWorldPos, draggedBlock.DragPoint.position);
+            draggedBlock.Rigidbody.velocity = Vector3.zero;
 
-            Vector3 dir = mouseWorldPos - draggedBlock.DragPoint.position;
-
-            Vector3 perimeterPointClosestToDragPoint = draggedBlock.GetComponent<Collider2D>().ClosestPoint(draggedBlock.DragPoint.position);
-            Debug.DrawLine(perimeterPointClosestToDragPoint, perimeterPointClosestToDragPoint + dir.normalized * blockSnapToCursorSpeed * Time.deltaTime);
-            if(!Physics.Raycast(perimeterPointClosestToDragPoint, dir, 5f * blockSnapToCursorSpeed * Time.deltaTime))
+            if(!Physics.Raycast(draggedBlock.transform.position, mouseWorldPos - draggedBlock.transform.position, blockSnapToCursorSpeed * Time.deltaTime))
             {
-                draggedBlock.Rigidbody.AddForceAtPosition(dir, draggedBlock.DragPoint.position);
-                draggedBlock.Rigidbody.MovePosition(Vector3.Lerp(draggedBlock.transform.position, mouseWorldPos, blockSnapToCursorSpeed * Time.deltaTime));
+                draggedBlock.transform.position = Vector3.Lerp(draggedBlock.transform.position, mouseWorldPos, blockSnapToCursorSpeed * Time.deltaTime);
             }
         }
     }
 
-    private void DrawLine(Vector3 start, Vector3 end)
+    private void HandleRotate()
     {
-        lineRenderer.enabled = true;
+        draggedBlock.transform.rotation = Quaternion.Lerp(draggedBlock.transform.rotation, Quaternion.Euler(0, 0, targetBlockRotateAngle), blockRotateSpeed * Time.deltaTime);
 
-        lineRenderer.positionCount = 2;
-        lineRenderer.SetPosition(0, start);
-        lineRenderer.SetPosition(1, end);
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            targetBlockRotateAngle += 90f;
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            targetBlockRotateAngle -= 90f;
+        }
     }
 }
