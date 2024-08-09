@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 200}
-  m_SizeDelta: {x: 90, y: 100}
+  m_AnchoredPosition: {x: 0, y: 100}
+  m_SizeDelta: {x: 90, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &3238114132916831260
 CanvasRenderer:
@@ -110,7 +110,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 100}
-  m_SizeDelta: {x: 90, y: 100}
+  m_SizeDelta: {x: 90, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &5406932329716531242
 CanvasRenderer:
@@ -184,7 +184,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 729.00006, y: 346}
+  m_AnchoredPosition: {x: 729.00006, y: 328}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2918720439271885617
@@ -217,8 +217,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Goal
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: db6d1bed91813724b82f9421de49206b, type: 2}
+  m_sharedMaterial: {fileID: 2644745909080210455, guid: db6d1bed91813724b82f9421de49206b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -242,8 +242,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 60.78
+  m_fontSizeBase: 60.78
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -319,7 +319,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 90, y: 100}
+  m_SizeDelta: {x: 90, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &1727793965098927125
 CanvasRenderer:
@@ -427,15 +427,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1f70ca04c025544a9c7f9046b1781a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPhysicalHealth: 60
-  maxMentalHealth: 60
-  maxFinancialHealth: 60
-  maxGoal: 60
-  physicalDrain: 1
-  mentalDrain: 1
-  financialDrain: 1
-  minInitalPercent: 0.6
-  maxInitalPercent: 0.9
+  maxGoal: 100
+  physicalDrain: 0.1
+  mentalDrain: 0.1
+  financialDrain: 0.1
   currentPhysicalHealth: 0
   currentMentalHealth: 0
   currentFinancialHealth: 0

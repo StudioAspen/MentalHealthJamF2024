@@ -357,54 +357,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1026782575}
     m_Modifications:
-    - target: {fileID: 1578903268396039612, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1578903268396039612, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4094832021921009449, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4094832021921009449, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156450494258429733, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
-      propertyPath: maxGoal
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156450494258429733, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
-      propertyPath: mentalDrain
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156450494258429733, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
-      propertyPath: physicalDrain
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156450494258429733, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
-      propertyPath: financialDrain
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239578514743830367, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239578514743830367, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5457644870013432742, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5457644870013432742, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6446764592938862122, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -485,6 +437,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7142994456929907697, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142994456929907697, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7293640018863387350, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
       propertyPath: m_Name
       value: GameUI
@@ -499,6 +459,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6446764592938862122, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
   m_PrefabInstance: {fileID: 1004010329}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1004010331 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 439998137970136888, guid: 900c6988b27c19644acdbadda37cfa71, type: 3}
+  m_PrefabInstance: {fileID: 1004010329}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1026782571
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,10 +759,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1210861723345366724, guid: 99066fffe935db84db055b6d3d6a55ab, type: 3}
-      propertyPath: resourceGain
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 6241816590425061802, guid: 99066fffe935db84db055b6d3d6a55ab, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.137608
@@ -950,6 +917,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5796644331715192161, guid: 46a1952332892cc4697cfdb98da5ece0, type: 3}
+      propertyPath: spawnRate
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5796644331715192161, guid: 46a1952332892cc4697cfdb98da5ece0, type: 3}
+      propertyPath: burnSlider
+      value: 
+      objectReference: {fileID: 1004010331}
     - target: {fileID: 7244507545284255123, guid: 46a1952332892cc4697cfdb98da5ece0, type: 3}
       propertyPath: m_Name
       value: Board

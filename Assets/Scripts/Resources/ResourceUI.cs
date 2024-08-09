@@ -20,12 +20,19 @@ public class ResourceUI : MonoBehaviour
     private void BarUpdate() {
         float maxHeight = goalBarTransform.sizeDelta.y;
 
-        physicalFillTransform.sizeDelta = new Vector2(physicalFillTransform.sizeDelta.x, maxHeight * (owner.currentPhysicalHealth / owner.maxGoal));
+        float physicalPercent = owner.currentPhysicalHealth / owner.maxGoal;
+        float mentalPercent = owner.currentMentalHealth / owner.maxGoal;
+        float financialPercent = owner.currentFinancialHealth / owner.maxGoal;
 
-        mentalFillTransform.position = new Vector2(mentalFillTransform.position.x, physicalFillTransform.position.y + physicalFillTransform.sizeDelta.y);
-        mentalFillTransform.sizeDelta = new Vector2(mentalFillTransform.sizeDelta.x, maxHeight * (owner.currentMentalHealth/owner.maxGoal));
+        Vector2 targetPhysicalSize = new Vector2(physicalFillTransform.sizeDelta.x, maxHeight * physicalPercent);
+        physicalFillTransform.sizeDelta = Vector2.Lerp(physicalFillTransform.sizeDelta, targetPhysicalSize, 10f * Time.deltaTime);
 
-        financialFillTransform.position = new Vector2(financialFillTransform.position.x, physicalFillTransform.position.y + mentalFillTransform.sizeDelta.y + physicalFillTransform.sizeDelta.y);
-        financialFillTransform.sizeDelta = new Vector2(financialFillTransform.sizeDelta.x, maxHeight * (owner.currentFinancialHealth / owner.maxGoal));
+        Vector2 targetMentalSize = new Vector2(mentalFillTransform.sizeDelta.x, maxHeight * mentalPercent);
+        mentalFillTransform.localPosition = new Vector2(mentalFillTransform.localPosition.x, physicalFillTransform.localPosition.y + physicalFillTransform.sizeDelta.y);
+        mentalFillTransform.sizeDelta = Vector2.Lerp(mentalFillTransform.sizeDelta, targetMentalSize, 10f * Time.deltaTime);
+
+        Vector2 targetFinancialSize = new Vector2(financialFillTransform.sizeDelta.x, maxHeight * financialPercent);
+        financialFillTransform.localPosition = new Vector2(financialFillTransform.localPosition.x, physicalFillTransform.localPosition.y + mentalFillTransform.sizeDelta.y + physicalFillTransform.sizeDelta.y);
+        financialFillTransform.sizeDelta = Vector2.Lerp(financialFillTransform.sizeDelta, targetFinancialSize, 10f * Time.deltaTime);
     }
 }

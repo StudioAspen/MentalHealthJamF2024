@@ -41,9 +41,10 @@ public class ResourceManager : MonoBehaviour
         float futureTotal = currentGoal + amount;
         float amtToSubtract = 0;
 
-        if(futureTotal >= maxGoal)
+        if (futureTotal >= maxGoal)
         {
             amtToSubtract = futureTotal - maxGoal;
+            OnReachGoal?.Invoke();
         }
 
         currentPhysicalHealth += amount - amtToSubtract;
@@ -55,6 +56,7 @@ public class ResourceManager : MonoBehaviour
         if (futureTotal >= maxGoal)
         {
             amtToSubtract = futureTotal - maxGoal;
+            OnReachGoal?.Invoke();
         }
 
         currentMentalHealth += amount - amtToSubtract;
@@ -66,6 +68,7 @@ public class ResourceManager : MonoBehaviour
         if (futureTotal >= maxGoal)
         {
             amtToSubtract = futureTotal - maxGoal;
+            OnReachGoal?.Invoke();
         }
 
         currentFinancialHealth += amount - amtToSubtract;

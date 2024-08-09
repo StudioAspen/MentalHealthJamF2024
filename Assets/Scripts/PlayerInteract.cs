@@ -36,7 +36,7 @@ namespace TetrisTemplate {
         private void InputHander() {
             if (Input.GetMouseButtonDown(0)) {
                 Vector3 worldPosCheck = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
-                Debug.Log(board.tilemap.WorldToCell(worldPosCheck));
+                //Debug.Log(board.tilemap.WorldToCell(worldPosCheck));
                 if (currentActivePiece) { // Setting position of current active
                     currentActivePiece.SetRotation(ghostCopy.rotationIndex);
                     currentActivePiece.SetPosition(ghostCopy.position);

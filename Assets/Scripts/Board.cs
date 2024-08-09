@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 
 [DefaultExecutionOrder(-1)]
 public class Board : MonoBehaviour
 {
+    [SerializeField] Slider burnSlider;
     [SerializeField] GameObject gamePiecePrefab;
     [SerializeField] int initalPieceAmount;
     [SerializeField] float burnRate;
@@ -60,6 +62,8 @@ public class Board : MonoBehaviour
                 BurnBottom();
                 burnTimer = burnRate;
             }
+
+            burnSlider.value = 1f - burnTimer / burnRate;
         }
     }
 
@@ -101,7 +105,7 @@ public class Board : MonoBehaviour
 
         List<Vector3Int> validPlaces = new List<Vector3Int>();
         Vector3Int topLeft = new Vector3Int(-boardSize.x/2, boardSize.y/2);
-        Debug.Log(topLeft);
+        //Debug.Log(topLeft);
         for(int i = 0; i < boardSize.y; i++) {
 
             // Finding all valid places on row
@@ -127,8 +131,8 @@ public class Board : MonoBehaviour
 
     public void GameOver()
     {
+        FindObjectOfType<GameManager>().LoseGame("Oh no! You got overwhelmed.");
         tilemap.ClearAllTiles();
-        FindObjectOfType<GameManager>().LoseGame();
         // Do anything else you want on game over here..
     }
 

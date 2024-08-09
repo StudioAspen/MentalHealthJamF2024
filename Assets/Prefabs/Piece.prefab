@@ -47,6 +47,5 @@ MonoBehaviour:
   stepDelay: 1
   moveDelay: 0.1
   lockDelay: 0.5
-  resourceGain: 2
-  goalGain: 1
+  resourceGain: 21.94
   canRender: 1

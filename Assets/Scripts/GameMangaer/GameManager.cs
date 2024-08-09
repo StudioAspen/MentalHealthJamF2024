@@ -36,22 +36,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void LoseGame(string msg)
+    {
+        endScreen.ShowEndScreen(msg);
+        resourceManager.SetDraining(false);
+        winConditionTimer.SetTimerActive(false);
+        if(board != null)
+        {
+            board.SetGameActive(false);
+        }
+    }
+
     public void WinGame() {
-        endScreen.SetEndScreen(true);
+        endScreen.ShowResultsEndScreen(resourceManager.currentPhysicalHealth/resourceManager.maxGoal, resourceManager.currentMentalHealth/resourceManager.maxGoal, resourceManager.currentFinancialHealth/resourceManager.maxGoal);
         resourceManager.SetDraining(false);
         winConditionTimer.SetTimerActive(false);
         if (board != null) {
             board.SetGameActive(false);
         }
 
-    }
-    public void LoseGame() {
-        endScreen.SetEndScreen(false);
-        resourceManager.SetDraining(false);
-        winConditionTimer.SetTimerActive(false);
-        if (board != null) {
-            board.SetGameActive(false);
-        }
     }
 
     private void CheckResources() {
@@ -62,7 +65,7 @@ public class GameManager : MonoBehaviour
     }
     private void CheckTimerWin() {
         if(winConditionTimer.timer <= 0) {
-            WinGame();
+            LoseGame("Ran out of time!");
         }
     }
 }

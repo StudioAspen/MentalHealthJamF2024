@@ -58,17 +58,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d4fe201741a0f14c82a9ce960b9f5e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  burnSlider: {fileID: 0}
   gamePiecePrefab: {fileID: 3552066037536790942, guid: 4432852900be1aa43aff037eafd07ea2, type: 3}
   initalPieceAmount: 6
   burnRate: 10
   spawnRate: 3
   activePieces: []
   pieceTypes:
-  - tile: {fileID: 11400000, guid: f6c4109fd0d185b419e5e665b07c42f0, type: 2}
+  - tile: {fileID: 11400000, guid: dd13528b34fd46b4490a38e3a6cbf15e, type: 2}
     resourceType: 0
-  - tile: {fileID: 11400000, guid: be0a34e2a842ae742b4fa8541a5f9fcf, type: 2}
+  - tile: {fileID: 11400000, guid: 897b7bfed1165c74781a0a03d6e77c3a, type: 2}
     resourceType: 1
-  - tile: {fileID: 11400000, guid: ae5c5dcd9d2744248ba2beb6b8dab80f, type: 2}
+  - tile: {fileID: 11400000, guid: c796d0cc7e2fde14d8ecb16b4bc5d39d, type: 2}
     resourceType: 2
   tetrominoes:
   - tetromino: 0

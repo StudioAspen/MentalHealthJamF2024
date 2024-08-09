@@ -12,7 +12,6 @@ public class Piece : MonoBehaviour {
     public float moveDelay = 0.1f;
     public float lockDelay = 0.5f;
     public float resourceGain = 2f;
-    public float goalGain = 1f;
 
     private float stepTime;
     private float moveTime;
@@ -94,18 +93,22 @@ public class Piece : MonoBehaviour {
         return newPiece;
     }
 
-    public void SetLock(bool val) {
+    public void SetBlock(bool val) {
         locked = val;
+        if (!canRender) return;
         if(locked) {
             ResourceManager resourceManager = FindObjectOfType<ResourceManager>();
             switch(pieceType.resourceType) {
                 case PieceResourceType.PHYSICAL:
+                    Debug.Log($"Physical +{resourceGain}");
                     resourceManager.AddPhysical(resourceGain);
                     break;
                 case PieceResourceType.MENTAL:
+                    Debug.Log($"Mental +{resourceGain}");
                     resourceManager.AddMental(resourceGain);
                     break;
                 case PieceResourceType.FINANCIAL:
+                    Debug.Log($"Financial +{resourceGain}");
                     resourceManager.AddFinancial(resourceGain);
                     break;
             }
@@ -201,7 +204,10 @@ public class Piece : MonoBehaviour {
             moveTime = Time.time + moveDelay;
             lockTime = 0f; // reset
             if (canRender) {
-                CollisionCheck();
+                if (!locked)
+                {
+                    CollisionCheck();
+                }
             }
             board.Set(this);
         }
@@ -213,12 +219,14 @@ public class Piece : MonoBehaviour {
         foreach(Vector3Int cell in cells) {
             Vector3Int posCheck = cell + position;
             Piece potentialPiece = board.GetPieceAtCell(posCheck + Vector3Int.down);
-            if (posCheck.y <= -board.boardSize.y/2) {
-                SetLock(true);
+            if (locked) return;
+            if (posCheck.y <= -board.boardSize.y / 2)
+            {
+                SetBlock(true);
             }
-            else if(potentialPiece) {
+            else if (potentialPiece) {
                 if(potentialPiece.locked) {
-                    SetLock(true);
+                    SetBlock(true);
                 }
             }
         }
@@ -249,7 +257,7 @@ public class Piece : MonoBehaviour {
         while(rotationIndex != newRotationIndex && limit > 0) {
             rotationIndex = Wrap(rotationIndex + direction, 0, 4);
             ApplyRotationMatrix(direction);
-            Debug.Log(rotationIndex + " " + newRotationIndex);
+            //Debug.Log(rotationIndex + " " + newRotationIndex);
             limit--;
         }
         board.Set(this);
