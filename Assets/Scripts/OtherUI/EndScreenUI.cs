@@ -6,6 +6,7 @@ using TMPro;
 public class EndScreenUI : MonoBehaviour
 {
     [SerializeField] GameObject endScreen;
+    [SerializeField] RectTransform postItTransform;
     [SerializeField] TMP_Text endText;
 
     [SerializeField] TMP_Text physicalStatsText;
@@ -38,5 +39,20 @@ public class EndScreenUI : MonoBehaviour
         endScreen.SetActive(true);
 
         endText.text = msg;
+
+        StartCoroutine(EndScreenAnimation());
+    }
+
+    private IEnumerator EndScreenAnimation()
+    {
+        postItTransform.localPosition = 1150f * Vector3.down;
+        for(float t = 0; t < 1f; t += Time.unscaledDeltaTime)
+        {
+            float c4 = (2 * Mathf.PI) / 3;
+            postItTransform.localPosition = 1150f * (1-(t == 0 ? 0 : t == 1 ? 1 : Mathf.Pow(2, -10 * t) * Mathf.Sin((t * 10f - 0.75f) * c4) + 1)) * Vector3.down;
+
+            yield return null;
+        }
+        postItTransform.localPosition = Vector3.zero;
     }
 }
