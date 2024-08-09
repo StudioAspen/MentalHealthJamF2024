@@ -55,10 +55,9 @@ public class GameManager : MonoBehaviour
     }
 
     private void CheckResources() {
-        if(resourceManager.currentPhysicalHealth <= 0 ||
-            resourceManager.currentMentalHealth <= 0 ||
-            resourceManager.currentFinancialHealth <= 0) {
-            LoseGame();
+        if(resourceManager.currentGoal >= resourceManager.maxGoal)
+        {
+            WinGame();
         }
     }
     private void CheckTimerWin() {
