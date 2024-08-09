@@ -13,6 +13,8 @@ public class Board : MonoBehaviour
     float burnTimer;
     [SerializeField] float spawnRate;
     float spawnTimer = 0;
+    [SerializeField] float burstRate = 15f;
+    float burstTimer = 0;
 
     public Tilemap tilemap { get; private set; }
     public List<Piece> activePieces = new List<Piece>();
@@ -64,7 +66,20 @@ public class Board : MonoBehaviour
             }
 
             burnSlider.value = 1f - burnTimer / burnRate;
+
+            burstTimer -= Time.deltaTime;
+            if(burstTimer <= 0)
+            {
+                SpawnPiece(); 
+                SpawnPiece();
+                SpawnPiece();
+                SpawnPiece();
+                SpawnPiece();
+                burstTimer = burstRate; 
+            }
         }
+
+        
     }
 
     public void SetGameActive(bool val) {
@@ -162,7 +177,7 @@ public class Board : MonoBehaviour
                 tilemap.SetTile(tilePosition, piece.pieceType.tile);
                 if (piece.locked) {
                     tilemap.SetTileFlags(tilePosition, TileFlags.None);
-                    tilemap.SetColor(tilePosition, Color.grey);
+                    tilemap.SetColor(tilePosition, new Color(0.75f, 0.75f, 0.75f));
                 }
             }
         }

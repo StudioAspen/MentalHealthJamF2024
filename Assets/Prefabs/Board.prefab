@@ -79,7 +79,7 @@ MonoBehaviour:
   - tetromino: 4
   - tetromino: 5
   - tetromino: 6
-  boardSize: {x: 15, y: 20}
+  boardSize: {x: 10, y: 20}
   spawnPosition: {x: -1, y: 8, z: 0}
 --- !u!1 &8831781993612784084
 GameObject:

@@ -522,9 +522,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxGoal: 100
-  physicalDrain: 0.1
-  mentalDrain: 0.1
-  financialDrain: 0.1
+  physicalDrain: 0.05
+  mentalDrain: 0.05
+  financialDrain: 0.05
   currentPhysicalHealth: 0
   currentMentalHealth: 0
   currentFinancialHealth: 0

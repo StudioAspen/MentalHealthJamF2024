@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 98aab03c96160994b91323252596ae32
+guid: 06b883c9d42469a4688a8d474712394d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -139,10 +139,10 @@ TextureImporter:
       name: calendar_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 685
-        height: 1080
+        x: 11
+        y: 14
+        width: 675
+        height: 54
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
