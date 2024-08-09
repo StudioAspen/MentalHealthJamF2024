@@ -8,12 +8,14 @@ public class GameManager : MonoBehaviour
     ResourceManager resourceManager;
     EndScreenUI endScreen;
     WinConditionTimer winConditionTimer;
+    Board board;
 
     private void Start() {
         // Finding objects
         resourceManager = FindObjectOfType<ResourceManager>();
         endScreen = FindObjectOfType<EndScreenUI>();
         winConditionTimer = FindAnyObjectByType<WinConditionTimer>();
+        board = FindObjectOfType<Board>();
         
         resourceManager.OnReachGoal.AddListener(WinGame); // Setting listener for winning game
     }
@@ -29,17 +31,27 @@ public class GameManager : MonoBehaviour
     public void StartGame() {
         resourceManager.SetDraining(true); // Starting draining
         winConditionTimer.SetTimerActive(true); // Starting timer
+        if (board != null) {
+            board.SetGameActive(true);
+        }
     }
 
     public void WinGame() {
         endScreen.SetEndScreen(true);
         resourceManager.SetDraining(false);
         winConditionTimer.SetTimerActive(false);
+        if (board != null) {
+            board.SetGameActive(false);
+        }
+
     }
     public void LoseGame() {
         endScreen.SetEndScreen(false);
         resourceManager.SetDraining(false);
         winConditionTimer.SetTimerActive(false);
+        if (board != null) {
+            board.SetGameActive(false);
+        }
     }
 
     private void CheckResources() {
