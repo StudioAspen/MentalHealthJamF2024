@@ -25,9 +25,9 @@ public class EndScreenUI : MonoBehaviour
         if (highestHealth == mentalPercent) endText.text = "You got your funny up... maybe it's time to get your money and body up?";
         if (highestHealth == financialPercent) endText.text = "You're rich now... lonely and mentally torn apart, but rich!";
 
-        physicalStatsText.text = $"Physical: {Mathf.Round(physicalPercent * 10000f) / 100}%";
-        mentalStatsText.text = $"Mental: {Mathf.Round(mentalPercent * 10000f) / 100}%";
-        financialStatsText.text = $"Financial: {Mathf.Round(financialPercent * 10000f) / 100}%";
+        physicalStatsText.text = $": {Mathf.Round(physicalPercent * 10000f) / 100}%";
+        mentalStatsText.text = $": {Mathf.Round(mentalPercent * 10000f) / 100}%";
+        financialStatsText.text = $": {Mathf.Round(financialPercent * 10000f) / 100}%";
     }
 
     public void ShowEndScreen(string msg)

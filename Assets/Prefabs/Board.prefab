@@ -65,9 +65,9 @@ MonoBehaviour:
   spawnRate: 3
   activePieces: []
   pieceTypes:
-  - tile: {fileID: 11400000, guid: dd13528b34fd46b4490a38e3a6cbf15e, type: 2}
-    resourceType: 0
   - tile: {fileID: 11400000, guid: 897b7bfed1165c74781a0a03d6e77c3a, type: 2}
+    resourceType: 0
+  - tile: {fileID: 11400000, guid: dd13528b34fd46b4490a38e3a6cbf15e, type: 2}
     resourceType: 1
   - tile: {fileID: 11400000, guid: c796d0cc7e2fde14d8ecb16b4bc5d39d, type: 2}
     resourceType: 2
@@ -79,7 +79,7 @@ MonoBehaviour:
   - tetromino: 4
   - tetromino: 5
   - tetromino: 6
-  boardSize: {x: 10, y: 20}
+  boardSize: {x: 15, y: 20}
   spawnPosition: {x: -1, y: 8, z: 0}
 --- !u!1 &8831781993612784084
 GameObject:
