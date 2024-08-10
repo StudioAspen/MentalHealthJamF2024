@@ -1,6 +1,7 @@
 using UnityEngine;
 
 public class Piece : MonoBehaviour {
+    [SerializeField] AudioSource lockSound;
     public Board board { get; private set; }
     public TetrominoData data { get; private set; }
     public PieceType pieceType { get; private set; }
@@ -97,6 +98,10 @@ public class Piece : MonoBehaviour {
         locked = val;
         if (!canRender) return;
         if(locked) {
+            if(!lockSound.isPlaying) {
+                lockSound.Play();
+            }
+
             ResourceManager resourceManager = FindObjectOfType<ResourceManager>();
             switch(pieceType.resourceType) {
                 case PieceResourceType.PHYSICAL:
