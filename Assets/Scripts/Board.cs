@@ -16,6 +16,7 @@ public class Board : MonoBehaviour
     [SerializeField] float burstRate = 15f;
     float burstTimer = 0;
 
+    public BoardAudio boardAudio;
     public Tilemap tilemap { get; private set; }
     public List<Piece> activePieces = new List<Piece>();
 
@@ -37,6 +38,7 @@ public class Board : MonoBehaviour
 
     private void Awake()
     {
+        boardAudio = GetComponentInChildren<BoardAudio>();
         tilemap = GetComponentInChildren<Tilemap>();
 
         for (int i = 0; i < tetrominoes.Length; i++) {
@@ -88,6 +90,7 @@ public class Board : MonoBehaviour
 
     public void SpawnPiece()
     {
+        boardAudio.PlayPop();
         int randomTetromino = Random.Range(0, tetrominoes.Length);
         TetrominoData data = tetrominoes[randomTetromino];
 
@@ -109,6 +112,7 @@ public class Board : MonoBehaviour
     }
 
     private void BurnBottom() {
+        boardAudio.PlayCrumble();
         foreach (Piece piece in activePieces) {
             if (piece.locked) {
                 piece.LockedMoveDown();

@@ -7,10 +7,12 @@ namespace TetrisTemplate {
         Ghost ghost;
         [SerializeField] Piece ghostCopy;
         Piece currentActivePiece;
+        AudioSource thunkAudio;
 
         private void Start() {
             board = FindObjectOfType<Board>();
             ghost = FindObjectOfType<Ghost>();
+            thunkAudio = GetComponent<AudioSource>();
             DisableGhost();
         }
 
@@ -44,6 +46,11 @@ namespace TetrisTemplate {
                     // Resetting values
                     currentActivePiece = null;
                     DisableGhost();
+
+                    // Audio
+                    if (!thunkAudio.isPlaying) {
+                        thunkAudio.Play();
+                    }
                 }
                 else { // Getting at mouse pos current active
                     Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));    
@@ -52,6 +59,11 @@ namespace TetrisTemplate {
                     if(currentActivePiece != null) {
                         if (!currentActivePiece.locked) {
                             SetGhost(currentActivePiece.ClonePiece().GetComponent<Piece>());
+
+                            // Audio
+                            if (!thunkAudio.isPlaying) {
+                                thunkAudio.Play();
+                            }
                         }
                         else {
                             currentActivePiece = null;
