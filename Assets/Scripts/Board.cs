@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 [DefaultExecutionOrder(-1)]
 public class Board : MonoBehaviour
 {
+    [SerializeField] Tile whiteTile;
     [SerializeField] Slider burnSlider;
     [SerializeField] GameObject gamePiecePrefab;
     [SerializeField] int initalPieceAmount;
@@ -88,7 +89,7 @@ public class Board : MonoBehaviour
         gameActive = val;
     }
 
-    public void SpawnPiece()
+    public Piece SpawnPiece()
     {
         boardAudio.PlayPop();
         int randomTetromino = Random.Range(0, tetrominoes.Length);
@@ -104,11 +105,12 @@ public class Board : MonoBehaviour
             newPiece.SetPosition(randomPos);
             activePieces.Add(newPiece);
             Set(newPiece);
-        } 
-        else {
-            Destroy(newPiece.gameObject);
-            GameOver();
+            return newPiece;
         }
+
+        Destroy(newPiece.gameObject);
+        GameOver();
+        return null;
     }
 
     private void BurnBottom() {
@@ -121,19 +123,24 @@ public class Board : MonoBehaviour
     }
 
     private bool TryGetRandomSpawnPos(Piece newPiece, out Vector3Int randomPos) {
-
         List<Vector3Int> validPlaces = new List<Vector3Int>();
         Vector3Int topLeft = new Vector3Int(-boardSize.x/2, boardSize.y/2);
         //Debug.Log(topLeft);
-        for(int i = 0; i < boardSize.y; i++) {
+
+        int spawnHeightRange = 3;
+        for(int i = 0; i < boardSize.y-spawnHeightRange; i++) {
 
             // Finding all valid places on row
             validPlaces.Clear();
             for(int j = 0; j < boardSize.x; j++) {
-                Vector3Int checkPos = topLeft + new Vector3Int(j,-i,0);
-                if(IsValidPosition(newPiece, checkPos)) {
-                    validPlaces.Add(checkPos);
-                } 
+
+                // Checking multiple rows to spawn for
+                for (int g = 0; g < spawnHeightRange; g++) {
+                    Vector3Int checkPos = topLeft + new Vector3Int(j, -(i+g), 0);
+                    if (IsValidPosition(newPiece, checkPos)) {
+                        validPlaces.Add(checkPos);
+                    }
+                }
             }
 
             if(validPlaces.Count > 0) {

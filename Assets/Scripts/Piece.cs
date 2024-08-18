@@ -101,7 +101,7 @@ public class Piece : MonoBehaviour {
             if(!lockSound.isPlaying) {
                 lockSound.Play();
             }
-
+            GetComponent<PieceDeadline>().LockIn(this);
             ResourceManager resourceManager = FindObjectOfType<ResourceManager>();
             switch(pieceType.resourceType) {
                 case PieceResourceType.PHYSICAL:

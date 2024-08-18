@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] bool useTimer = false;
+    [SerializeField] GameObject startScreen;
     ResourceManager resourceManager;
     EndScreenUI endScreen;
     WinConditionTimer winConditionTimer;
@@ -13,10 +14,11 @@ public class GameManager : MonoBehaviour
     private void Start() {
         // Finding objects
         resourceManager = FindObjectOfType<ResourceManager>();
-        endScreen = FindObjectOfType<EndScreenUI>();
+        endScreen = FindObjectOfType<EndScreenUI>(true);
         winConditionTimer = FindAnyObjectByType<WinConditionTimer>();
         board = FindObjectOfType<Board>();
-        
+
+        startScreen.SetActive(true);
         resourceManager.OnReachGoal.AddListener(WinGame); // Setting listener for winning game
     }
 
