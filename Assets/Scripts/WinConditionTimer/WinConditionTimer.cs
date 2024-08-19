@@ -10,6 +10,10 @@ public class WinConditionTimer : MonoBehaviour
     public float timer;
     bool timerActive = false;
 
+    [SerializeField] AnimationCurve redCurve;
+    public float redDuration = 1f;
+    float redTimer;
+
     // Start is called before the first frame update
     void Start() {
         timer = maxTimer;
@@ -19,6 +23,14 @@ public class WinConditionTimer : MonoBehaviour
     void Update() {
         if (timerActive) {
             UpdateTimer();
+        }
+        if(redTimer >= 0) {
+            redTimer -= Time.deltaTime;
+            float value = redCurve.Evaluate(redTimer / redDuration);
+            timerText.color = Color.Lerp(Color.white, Color.red, value);
+        }
+        else {
+            timerText.color = Color.white;
         }
     }
 
@@ -31,4 +43,12 @@ public class WinConditionTimer : MonoBehaviour
         TimeSpan timeSpan = TimeSpan.FromSeconds(timer);
         timerText.text = "Timer: " + timeSpan.ToString(@"mm\:ss");
     }
+    public void LowerTimer(float value) {
+        timer = Mathf.Max(0, timer - value);
+
+        redTimer = redDuration; // setting tezt duration
+
+        TimeSpan timeSpan = TimeSpan.FromSeconds(timer);
+        timerText.text = "Timer: " + timeSpan.ToString(@"mm\:ss");
+    } 
 }

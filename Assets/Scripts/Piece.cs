@@ -18,7 +18,8 @@ public class Piece : MonoBehaviour {
     private float moveTime;
     private float lockTime;
     public bool locked { get; private set; } 
-
+    public bool deadline { get; private set; }
+    public Color deadlineColor;
     public bool canRender = true;
 
     public void Initialize(Board board, Vector3Int position, TetrominoData data, PieceType pieceType)
@@ -73,6 +74,11 @@ public class Piece : MonoBehaviour {
         DestroyCheck();
     }
 
+    public void InitalizeDeadline(DeadlineData data) {
+        deadline = true;
+        deadlineColor = data.color;
+    }
+
     private void DestroyCheck() {
         int highestY = -board.boardSize.y;
         foreach (Vector3Int cell in cells) {
@@ -102,20 +108,25 @@ public class Piece : MonoBehaviour {
                 lockSound.Play();
             }
 
-            ResourceManager resourceManager = FindObjectOfType<ResourceManager>();
-            switch(pieceType.resourceType) {
-                case PieceResourceType.PHYSICAL:
-                    Debug.Log($"Physical +{resourceGain}");
-                    resourceManager.AddPhysical(resourceGain);
-                    break;
-                case PieceResourceType.MENTAL:
-                    Debug.Log($"Mental +{resourceGain}");
-                    resourceManager.AddMental(resourceGain);
-                    break;
-                case PieceResourceType.FINANCIAL:
-                    Debug.Log($"Financial +{resourceGain}");
-                    resourceManager.AddFinancial(resourceGain);
-                    break;
+            if (deadline) {
+                FindObjectOfType<DeadlineManager>().LockInPiece(this);
+            }
+            else {
+                ResourceManager resourceManager = FindObjectOfType<ResourceManager>();
+                switch (pieceType.resourceType) {
+                    case PieceResourceType.PHYSICAL:
+                        Debug.Log($"Physical +{resourceGain}");
+                        resourceManager.AddPhysical(resourceGain);
+                        break;
+                    case PieceResourceType.MENTAL:
+                        Debug.Log($"Mental +{resourceGain}");
+                        resourceManager.AddMental(resourceGain);
+                        break;
+                    case PieceResourceType.FINANCIAL:
+                        Debug.Log($"Financial +{resourceGain}");
+                        resourceManager.AddFinancial(resourceGain);
+                        break;
+                }
             }
         }
     }

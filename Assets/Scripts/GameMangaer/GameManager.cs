@@ -5,18 +5,22 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] bool useTimer = false;
+    [SerializeField] GameObject startScreen;
     ResourceManager resourceManager;
     EndScreenUI endScreen;
+    DeadlineManager deadlineManager;
     WinConditionTimer winConditionTimer;
     Board board;
 
     private void Start() {
         // Finding objects
         resourceManager = FindObjectOfType<ResourceManager>();
-        endScreen = FindObjectOfType<EndScreenUI>();
+        endScreen = FindObjectOfType<EndScreenUI>(true);
+        deadlineManager = FindAnyObjectByType<DeadlineManager>();
         winConditionTimer = FindAnyObjectByType<WinConditionTimer>();
         board = FindObjectOfType<Board>();
-        
+
+        startScreen.SetActive(true);
         resourceManager.OnReachGoal.AddListener(WinGame); // Setting listener for winning game
     }
 
@@ -31,6 +35,7 @@ public class GameManager : MonoBehaviour
     public void StartGame() {
         resourceManager.SetDraining(true); // Starting draining
         winConditionTimer.SetTimerActive(true); // Starting timer
+        deadlineManager.StartGame();
         if (board != null) {
             board.SetGameActive(true);
         }
@@ -41,6 +46,7 @@ public class GameManager : MonoBehaviour
         endScreen.ShowEndScreen(msg);
         resourceManager.SetDraining(false);
         winConditionTimer.SetTimerActive(false);
+        deadlineManager.EndGame();
         if(board != null)
         {
             board.SetGameActive(false);

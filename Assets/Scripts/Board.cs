@@ -6,12 +6,13 @@ using UnityEngine.Tilemaps;
 [DefaultExecutionOrder(-1)]
 public class Board : MonoBehaviour
 {
+    [SerializeField] Tile whiteTile;
     [SerializeField] Slider burnSlider;
     [SerializeField] GameObject gamePiecePrefab;
     [SerializeField] int initalPieceAmount;
     [SerializeField] float burnRate;
     float burnTimer;
-    [SerializeField] float spawnRate;
+    [SerializeField] Vector2 spawnRate;
     float spawnTimer = 0;
     [SerializeField] float burstRate = 15f;
     float burstTimer = 0;
@@ -58,7 +59,7 @@ public class Board : MonoBehaviour
             spawnTimer -= Time.deltaTime;
             if (spawnTimer <= 0) {
                 SpawnPiece();
-                spawnTimer = spawnRate;
+                spawnTimer = Random.Range(spawnRate.x, spawnRate.y);
             }
 
             burnTimer -= Time.deltaTime;
@@ -72,11 +73,6 @@ public class Board : MonoBehaviour
             burstTimer -= Time.deltaTime;
             if(burstTimer <= 0)
             {
-                SpawnPiece(); 
-                SpawnPiece();
-                SpawnPiece();
-                SpawnPiece();
-                SpawnPiece();
                 burstTimer = burstRate; 
             }
         }
@@ -88,7 +84,7 @@ public class Board : MonoBehaviour
         gameActive = val;
     }
 
-    public void SpawnPiece()
+    public Piece SpawnPiece()
     {
         boardAudio.PlayPop();
         int randomTetromino = Random.Range(0, tetrominoes.Length);
@@ -104,11 +100,12 @@ public class Board : MonoBehaviour
             newPiece.SetPosition(randomPos);
             activePieces.Add(newPiece);
             Set(newPiece);
-        } 
-        else {
-            Destroy(newPiece.gameObject);
-            GameOver();
+            return newPiece;
         }
+
+        Destroy(newPiece.gameObject);
+        GameOver();
+        return null;
     }
 
     private void BurnBottom() {
@@ -121,19 +118,24 @@ public class Board : MonoBehaviour
     }
 
     private bool TryGetRandomSpawnPos(Piece newPiece, out Vector3Int randomPos) {
-
         List<Vector3Int> validPlaces = new List<Vector3Int>();
         Vector3Int topLeft = new Vector3Int(-boardSize.x/2, boardSize.y/2);
         //Debug.Log(topLeft);
-        for(int i = 0; i < boardSize.y; i++) {
+
+        int spawnHeightRange = 5;
+        for(int i = 0; i < boardSize.y-spawnHeightRange; i++) {
 
             // Finding all valid places on row
             validPlaces.Clear();
             for(int j = 0; j < boardSize.x; j++) {
-                Vector3Int checkPos = topLeft + new Vector3Int(j,-i,0);
-                if(IsValidPosition(newPiece, checkPos)) {
-                    validPlaces.Add(checkPos);
-                } 
+
+                // Checking multiple rows to spawn for
+                for (int g = 0; g < spawnHeightRange; g++) {
+                    Vector3Int checkPos = topLeft + new Vector3Int(j, -(i+g), 0);
+                    if (IsValidPosition(newPiece, checkPos)) {
+                        validPlaces.Add(checkPos);
+                    }
+                }
             }
 
             if(validPlaces.Count > 0) {
@@ -178,10 +180,28 @@ public class Board : MonoBehaviour
             // Only drawing tile if its in bounds
             RectInt bounds = Bounds;
             if (bounds.Contains((Vector2Int)tilePosition)) {
-                tilemap.SetTile(tilePosition, piece.pieceType.tile);
+
+                // Setting tile
+                if(piece.deadline) {
+                    tilemap.SetTile(tilePosition, whiteTile);
+                }
+                else {
+                    tilemap.SetTile(tilePosition, piece.pieceType.tile);
+                }
+
+                // Setting color
+                Color lockedColor = new Color(0.75f, 0.75f, 0.75f);
+                if (piece.deadline) {
+                    Debug.Log("deadline set");
+                    tilemap.SetTileFlags(tilePosition, TileFlags.None);
+                    tilemap.SetColor(tilePosition, piece.deadlineColor);
+                }
                 if (piece.locked) {
                     tilemap.SetTileFlags(tilePosition, TileFlags.None);
-                    tilemap.SetColor(tilePosition, new Color(0.75f, 0.75f, 0.75f));
+                    if(piece.deadline) {
+                        lockedColor += piece.deadlineColor;
+                    }
+                    tilemap.SetColor(tilePosition, lockedColor);
                 }
             }
         }
