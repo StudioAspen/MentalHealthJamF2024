@@ -50,6 +50,7 @@ MonoBehaviour:
   moveDelay: 0.1
   lockDelay: 0.5
   resourceGain: 3
+  deadlineColor: {r: 0, g: 0, b: 0, a: 0}
   canRender: 1
 --- !u!82 &5872811121631328787
 AudioSource:

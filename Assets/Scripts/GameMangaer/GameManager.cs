@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject startScreen;
     ResourceManager resourceManager;
     EndScreenUI endScreen;
+    DeadlineManager deadlineManager;
     WinConditionTimer winConditionTimer;
     Board board;
 
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
         // Finding objects
         resourceManager = FindObjectOfType<ResourceManager>();
         endScreen = FindObjectOfType<EndScreenUI>(true);
+        deadlineManager = FindAnyObjectByType<DeadlineManager>();
         winConditionTimer = FindAnyObjectByType<WinConditionTimer>();
         board = FindObjectOfType<Board>();
 
@@ -33,6 +35,7 @@ public class GameManager : MonoBehaviour
     public void StartGame() {
         resourceManager.SetDraining(true); // Starting draining
         winConditionTimer.SetTimerActive(true); // Starting timer
+        deadlineManager.StartGame();
         if (board != null) {
             board.SetGameActive(true);
         }
@@ -43,6 +46,7 @@ public class GameManager : MonoBehaviour
         endScreen.ShowEndScreen(msg);
         resourceManager.SetDraining(false);
         winConditionTimer.SetTimerActive(false);
+        deadlineManager.EndGame();
         if(board != null)
         {
             board.SetGameActive(false);

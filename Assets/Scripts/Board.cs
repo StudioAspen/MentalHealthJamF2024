@@ -12,7 +12,7 @@ public class Board : MonoBehaviour
     [SerializeField] int initalPieceAmount;
     [SerializeField] float burnRate;
     float burnTimer;
-    [SerializeField] float spawnRate;
+    [SerializeField] Vector2 spawnRate;
     float spawnTimer = 0;
     [SerializeField] float burstRate = 15f;
     float burstTimer = 0;
@@ -59,7 +59,7 @@ public class Board : MonoBehaviour
             spawnTimer -= Time.deltaTime;
             if (spawnTimer <= 0) {
                 SpawnPiece();
-                spawnTimer = spawnRate;
+                spawnTimer = Random.Range(spawnRate.x, spawnRate.y);
             }
 
             burnTimer -= Time.deltaTime;
@@ -73,11 +73,6 @@ public class Board : MonoBehaviour
             burstTimer -= Time.deltaTime;
             if(burstTimer <= 0)
             {
-                SpawnPiece(); 
-                SpawnPiece();
-                SpawnPiece();
-                SpawnPiece();
-                SpawnPiece();
                 burstTimer = burstRate; 
             }
         }
@@ -127,7 +122,7 @@ public class Board : MonoBehaviour
         Vector3Int topLeft = new Vector3Int(-boardSize.x/2, boardSize.y/2);
         //Debug.Log(topLeft);
 
-        int spawnHeightRange = 3;
+        int spawnHeightRange = 5;
         for(int i = 0; i < boardSize.y-spawnHeightRange; i++) {
 
             // Finding all valid places on row
@@ -185,10 +180,28 @@ public class Board : MonoBehaviour
             // Only drawing tile if its in bounds
             RectInt bounds = Bounds;
             if (bounds.Contains((Vector2Int)tilePosition)) {
-                tilemap.SetTile(tilePosition, piece.pieceType.tile);
+
+                // Setting tile
+                if(piece.deadline) {
+                    tilemap.SetTile(tilePosition, whiteTile);
+                }
+                else {
+                    tilemap.SetTile(tilePosition, piece.pieceType.tile);
+                }
+
+                // Setting color
+                Color lockedColor = new Color(0.75f, 0.75f, 0.75f);
+                if (piece.deadline) {
+                    Debug.Log("deadline set");
+                    tilemap.SetTileFlags(tilePosition, TileFlags.None);
+                    tilemap.SetColor(tilePosition, piece.deadlineColor);
+                }
                 if (piece.locked) {
                     tilemap.SetTileFlags(tilePosition, TileFlags.None);
-                    tilemap.SetColor(tilePosition, new Color(0.75f, 0.75f, 0.75f));
+                    if(piece.deadline) {
+                        lockedColor += piece.deadlineColor;
+                    }
+                    tilemap.SetColor(tilePosition, lockedColor);
                 }
             }
         }

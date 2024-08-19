@@ -2631,6 +2631,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2404448651891545443}
+  - component: {fileID: 4879957081851328108}
   m_Layer: 5
   m_Name: DeadlineUI
   m_TagString: Untagged
@@ -2659,6 +2660,27 @@ RectTransform:
   m_AnchoredPosition: {x: -691, y: 126}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4879957081851328108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8334652635556472859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b71eb7fb43f6d44d9ffe2dd8d186ccd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deadlineLayout: {fileID: 8320153763740141745}
+  deadlinePrefab: {fileID: 2191290644630797052, guid: 2fc193f0b2f1c53439fb1df4ea6908ce, type: 3}
+  deadlineSpawnRate: {x: 10, y: 15}
+  deadlineSpawnAmount: {x: 3, y: 4}
+  deadlineDatas:
+  - {fileID: 11400000, guid: 491646f76d7f5074cba8be95e52b3f3a, type: 2}
+  - {fileID: 11400000, guid: 246d0639b0e1cb74d8aed6d481b6047d, type: 2}
+  - {fileID: 11400000, guid: fcdc7c6f750b67d458392167ea906b2f, type: 2}
+  - {fileID: 11400000, guid: 365914b493a74f4488415ecbdccedc9e, type: 2}
 --- !u!1 &8535843177116626538
 GameObject:
   m_ObjectHideFlags: 0
